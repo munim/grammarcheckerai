@@ -283,6 +283,18 @@ Object.defineProperty(window, 'localStorage', {
 - Parallelize test execution
 - Avoid unnecessary setup/teardown
 
+## Recent Improvements to Testing Framework
+
+### Model Configuration Testing
+We've added specific tests for the model configuration feature:
+
+1. **Environment Variable Testing** - Verifies that the model is correctly read from environment variables
+2. **Default Model Testing** - Ensures the default model is used when no environment variable is set
+3. **API Request Testing** - Confirms that the correct model is sent in API requests
+4. **Backward Compatibility Testing** - Validates that existing functionality remains unchanged
+
+These tests can be found in `src/lib/__tests__/openrouter.model.test.ts`.
+
 ## Conclusion
 
 Following this TDD approach ensures that new features are:

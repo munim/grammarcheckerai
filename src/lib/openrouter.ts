@@ -1,10 +1,12 @@
 export class OpenRouterClient {
   private apiKey: string;
   private baseUrl: string;
+  private model: string;
 
   constructor(apiKey: string) {
     this.apiKey = apiKey;
     this.baseUrl = 'https://openrouter.ai/api/v1';
+    this.model = process.env.OPENROUTER_MODEL || 'mistralai/mistral-7b-instruct:free';
   }
 
   async checkGrammar(text: string, inputLanguage: string, explanationLanguage: string): Promise<unknown> {
@@ -18,7 +20,7 @@ export class OpenRouterClient {
         'HTTP-Referer': process.env.NEXTJS_URL || 'http://localhost:3000',
       },
       body: JSON.stringify({
-        model: 'mistralai/mistral-7b-instruct:free',
+        model: this.model,
         messages: [
           {
             role: 'user',

@@ -40,6 +40,7 @@ A mobile-first web application that analyzes user-submitted text for grammar err
    ```env
    OPENROUTER_API_KEY=your_openrouter_api_key_here
    NEXTJS_URL=http://localhost:3000
+   OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
    ```
 
 4. Run the development server:
@@ -104,6 +105,14 @@ For an overview of the documentation structure, see [docs/README.md](docs/README
 - [OpenRouter API](https://openrouter.ai/) - Access to various LLMs through a single API
 - [React](https://reactjs.org/) - JavaScript library for building user interfaces
 
+## Environment Variables
+
+The application uses the following environment variables:
+
+- `OPENROUTER_API_KEY` - Your OpenRouter API key (required)
+- `NEXTJS_URL` - The URL where your application is hosted (required for API referer)
+- `OPENROUTER_MODEL` - The OpenRouter model to use (optional, defaults to `mistralai/mistral-7b-instruct:free`)
+
 ## Deployment
 
 To deploy this application:
@@ -111,6 +120,7 @@ To deploy this application:
 1. Set the environment variables in your deployment platform:
    - `OPENROUTER_API_KEY`
    - `NEXTJS_URL` (your deployed URL)
+   - `OPENROUTER_MODEL` (optional)
 
 2. Build the application:
    ```bash

@@ -219,6 +219,8 @@ const apiKey = process.env.OPENROUTER_API_KEY;
 if (!apiKey) {
   throw new Error('API key is required');
 }
+
+const model = process.env.OPENROUTER_MODEL || 'mistralai/mistral-7b-instruct:free';
 ```
 
 ### Keyboard Shortcuts
@@ -258,6 +260,14 @@ const handleKeyDown = (e: React.KeyboardEvent) => {
 7. Verify keyboard shortcuts work
 8. Run all tests and ensure they pass
 
+## Environment Variables
+
+The application uses the following environment variables:
+
+- `OPENROUTER_API_KEY` - Your OpenRouter API key (required)
+- `NEXTJS_URL` - The URL where your application is hosted (required for API referer)
+- `OPENROUTER_MODEL` - The OpenRouter model to use (optional, defaults to `mistralai/mistral-7b-instruct:free`)
+
 ## Troubleshooting Common Issues
 
 ### API Errors
@@ -290,6 +300,7 @@ const handleKeyDown = (e: React.KeyboardEvent) => {
 3. **Keyboard Shortcuts**: Added Ctrl+Enter support for submitting text
 4. **Export Functionality**: Users can now export their history as JSON
 5. **Improved State Management**: Centralized state management in the main page component
+6. **Configurable Model**: OpenRouter model can now be configured via environment variable
 
 ## Future Enhancement Opportunities
 

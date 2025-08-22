@@ -111,6 +111,7 @@ Handles communication with the OpenRouter API:
 2. **Grammar Check**: Sends text and language preferences to the API
 3. **Prompt Engineering**: Constructs prompts for optimal LLM responses
 4. **Response Handling**: Processes API responses
+5. **Model Configuration**: Uses model specified in environment variable or defaults to `mistralai/mistral-7b-instruct:free`
 
 ### API Route (`src/app/api/grammar-check/route.ts`)
 
@@ -219,6 +220,7 @@ Required environment variables:
 
 - `OPENROUTER_API_KEY`: OpenRouter API key
 - `NEXTJS_URL`: Application URL for API referer header
+- `OPENROUTER_MODEL`: OpenRouter model to use (optional, defaults to `mistralai/mistral-7b-instruct:free`)
 
 ### Build Process
 
@@ -319,5 +321,6 @@ For older browsers, polyfills may be required for some JavaScript features.
 4. **Export Functionality**: Users can now export their history as JSON
 5. **Improved State Management**: Centralized state management in the main page component
 6. **Hydration Error Fixes**: Resolved client-server mismatches that caused hydration errors
+7. **Configurable Model**: OpenRouter model can now be configured via environment variable
 
 For development guidelines and best practices, see our [AI Development Guide](AI_DEVELOPMENT_GUIDE.md).

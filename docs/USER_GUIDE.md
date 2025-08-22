@@ -24,6 +24,7 @@ To run this application locally, you'll need:
    ```env
    OPENROUTER_API_KEY=your_openrouter_api_key_here
    NEXTJS_URL=http://localhost:3000
+   OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
    ```
 4. Start the development server:
    ```bash
@@ -119,6 +120,14 @@ The application communicates with OpenRouter's API through:
 1. Update `HistoryPanel.tsx` for new history management features
 2. Modify `localStorage.ts` for additional storage functionality
 
+## Environment Variables
+
+The application uses the following environment variables:
+
+- `OPENROUTER_API_KEY` - Your OpenRouter API key (required)
+- `NEXTJS_URL` - The URL where your application is hosted (required for API referer)
+- `OPENROUTER_MODEL` - The OpenRouter model to use (optional, defaults to `mistralai/mistral-7b-instruct:free`)
+
 ## Deployment
 
 ### Environment Variables
@@ -126,6 +135,7 @@ The application communicates with OpenRouter's API through:
 For deployment, ensure these environment variables are set:
 - `OPENROUTER_API_KEY`: Your OpenRouter API key
 - `NEXTJS_URL`: The URL where your application will be hosted
+- `OPENROUTER_MODEL`: The OpenRouter model to use (optional)
 
 ### Building for Production
 
