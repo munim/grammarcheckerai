@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image
-FROM node:18-alpine AS base
+FROM node:24-alpine AS base
 
 # Set the working directory
 WORKDIR /app
@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies with legacy peer deps to avoid React version conflicts
+RUN npm ci --legacy-peer-deps
 
 # Copy the rest of the application code
 COPY . .

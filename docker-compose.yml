@@ -5,25 +5,10 @@ services:
     build: .
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - NEXTJS_URL=${NEXTJS_URL}
-    volumes:
-      - .:/app
-      - /app/node_modules
-    restart: unless-stopped
-
-  app-dev:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=development
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - NEXTJS_URL=${NEXTJS_URL}
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: npm run dev
+      - NEXTJS_URL=${NEXTJS_URL:-http://localhost:3000}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-mistralai/mistral-7b-instruct:free}
     restart: unless-stopped

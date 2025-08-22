@@ -55,8 +55,21 @@ A mobile-first web application that analyzes user-submitted text for grammar err
 Alternatively, you can run the application using Docker:
 
 ```bash
+# Build the Docker image
 docker build -t grammar-check .
+
+# Run the container
 docker run -p 3000:3000 -e OPENROUTER_API_KEY=your_api_key_here grammar-check
+```
+
+Or using Docker Compose:
+```bash
+# Copy the example .env file and update with your values
+cp .env.example .env
+# Edit .env file with your OpenRouter API key
+
+# Run with Docker Compose
+docker-compose up
 ```
 
 ## Usage

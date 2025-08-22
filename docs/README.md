@@ -58,6 +58,9 @@ docs/
 ### For Project Management
 - [Project Completion Summary](project/PROJECT_COMPLETION_SUMMARY.md) - Final project status
 
+### Environment Variables
+- [Environment Variable Configuration](ENVIRONMENT_VARIABLES.md) - How to configure environment variables
+
 ## Benefits of This Structure
 
 1. **Organized Documentation** - Documents are categorized by audience and purpose
