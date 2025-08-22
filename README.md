@@ -89,13 +89,20 @@ src/
 
 For detailed documentation, please see the [docs](docs/) directory:
 
-- [User Guide](docs/USER_GUIDE.md) - Instructions for using the application
-- [Technical Documentation](docs/TECHNICAL_DOCS.md) - In-depth technical information for developers
-- [AI Development Guide](docs/AI_DEVELOPMENT_GUIDE.md) - Guidelines for AI assistants working on the project
-- [Test Plan](docs/TEST_PLAN.md) - Comprehensive testing strategy
-- [TDD Guide](docs/TDD_GUIDE.md) - Test-Driven Development approach
+### For Users
+- [User Guide](docs/user/USER_GUIDE.md) - Instructions for using the application
 
-For an overview of the documentation structure, see [docs/README.md](docs/README.md).
+### For Developers
+- [AI Development Guide](docs/developer/AI_DEVELOPMENT_GUIDE.md) - Guidelines for AI assistants working on the project
+- [TDD Guide](docs/developer/TDD_GUIDE.md) - Test-Driven Development approach
+
+### For Technical Users
+- [Technical Documentation](docs/technical/TECHNICAL_DOCS.md) - In-depth technical information
+
+### For Testers
+- [Test Plan](docs/testing/TEST_PLAN.md) - Comprehensive testing strategy
+
+### For an overview of all documentation, see [docs/README.md](docs/README.md).
 
 ## Technologies Used
 

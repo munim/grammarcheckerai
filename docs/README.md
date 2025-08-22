@@ -14,52 +14,56 @@ This document provides an overview of the documentation structure for the Gramma
 └── ...                       # Other project files
 ```
 
-## Documentation Directory
+## Documentation Directory Structure
 
 ```
 docs/
-├── USER_GUIDE.md                    # Instructions for using the application
-├── TECHNICAL_DOCS.md                # In-depth technical information
-├── AI_DEVELOPMENT_GUIDE.md          # Guidelines for AI assistants
-├── TDD_GUIDE.md                     # Test-Driven Development approach
-├── TEST_PLAN.md                     # Comprehensive testing strategy
-├── TESTING_SUMMARY.md               # Testing implementation overview
-├── TESTING_IMPLEMENTATION_SUMMARY.md # Complete testing framework
-├── PROJECT_SUMMARY.md               # Project files overview
-├── PROJECT_COMPLETE_SUMMARY.md      # Complete project implementation
-├── PROJECT_COMPLETION_SUMMARY.md    # Final project status
-├── FINAL_PROJECT_STATUS.md          # Production readiness summary
-└── DOCUMENTATION_REORGANIZATION_SUMMARY.md # This file
+├── user/                     # Documentation for end users
+│   ├── README.md             # User documentation index
+│   └── USER_GUIDE.md         # User instructions
+├── developer/                # Documentation for developers
+│   ├── README.md             # Developer documentation index
+│   ├── AI_DEVELOPMENT_GUIDE.md # Development guidelines
+│   ├── TDD_GUIDE.md          # Test-Driven Development
+│   └── Model Configuration Refactoring documents
+├── technical/                # Technical documentation
+│   ├── README.md             # Technical documentation index
+│   └── TECHNICAL_DOCS.md     # Technical implementation
+├── testing/                  # Testing documentation
+│   ├── README.md             # Testing documentation index
+│   ├── TEST_PLAN.md          # Testing strategy
+│   └── Testing summary documents
+├── project/                  # Project management documentation
+│   ├── README.md             # Project documentation index
+│   └── Project summary documents
+└── README.md                 # This file
 ```
-
-## Key Documentation Files
-
-### For Users
-- [USER_GUIDE.md](USER_GUIDE.md) - Complete guide for using the application
-
-### For Developers
-- [TECHNICAL_DOCS.md](TECHNICAL_DOCS.md) - Technical implementation details
-- [AI_DEVELOPMENT_GUIDE.md](AI_DEVELOPMENT_GUIDE.md) - Development guidelines
-- [TDD_GUIDE.md](TDD_GUIDE.md) - Test-Driven Development approach
-
-### For Testers
-- [TEST_PLAN.md](TEST_PLAN.md) - Comprehensive testing strategy
-- [TESTING_SUMMARY.md](TESTING_SUMMARY.md) - Testing implementation overview
-
-### For Project Management
-- [PROJECT_COMPLETION_SUMMARY.md](PROJECT_COMPLETION_SUMMARY.md) - Final project status
-- [FINAL_PROJECT_STATUS.md](FINAL_PROJECT_STATUS.md) - Production readiness
 
 ## Navigation
 
-All documentation files reference each other using relative paths since they are in the same directory. The README.md in the root directory references documentation files using the `docs/` prefix.
+### For Users
+- [User Guide](user/USER_GUIDE.md) - Complete guide for using the application
+
+### For Developers
+- [AI Development Guide](developer/AI_DEVELOPMENT_GUIDE.md) - Guidelines for AI assistants
+- [TDD Guide](developer/TDD_GUIDE.md) - Test-Driven Development approach
+- [Model Configuration Refactoring Summary](developer/MODEL_CONFIGURATION_REFACTORING_SUMMARY.md) - Model configuration changes
+
+### For Technical Users
+- [Technical Documentation](technical/TECHNICAL_DOCS.md) - In-depth technical information
+
+### For Testers
+- [Test Plan](testing/TEST_PLAN.md) - Comprehensive testing strategy
+
+### For Project Management
+- [Project Completion Summary](project/PROJECT_COMPLETION_SUMMARY.md) - Final project status
 
 ## Benefits of This Structure
 
-1. **Centralized Documentation** - All documentation is in one easily accessible location
-2. **Clean Project Root** - The root directory contains only essential files
+1. **Organized Documentation** - Documents are categorized by audience and purpose
+2. **Easy Navigation** - Each category has its own README for quick access
 3. **Scalable Organization** - Easy to add new documentation files
-4. **Maintainable** - Simple to update references when files are moved or renamed
+4. **Maintainable** - Simple to update and manage documentation
 5. **Standard Practice** - Follows common documentation organization patterns
 
 This structure makes it easy for users, developers, and stakeholders to find the information they need while maintaining a clean and organized project layout.
