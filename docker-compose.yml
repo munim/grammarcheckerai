@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - NEXTJS_URL=${NEXTJS_URL}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  app-dev:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - NEXTJS_URL=${NEXTJS_URL}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+    restart: unless-stopped
