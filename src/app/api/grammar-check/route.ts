@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { OpenRouterClient } from '@/lib/openrouter';
 import { GrammarCheckRequest } from '@/lib/types';
+import { safeJsonParse, validateGrammarResponse } from '@/lib/json-utils';
 
 export const runtime = 'edge';
 
@@ -55,16 +56,35 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Parse the JSON response
+    // Parse the JSON response using our safe parsing utility
     let parsedResponse;
     try {
-      parsedResponse = JSON.parse(content);
+      parsedResponse = safeJsonParse(content);
     } catch (parseError: unknown) {
-      // If JSON parsing fails, return the raw content for debugging
+      console.error('Failed to parse OpenRouter response after all attempts:', parseError);
+      console.error('Raw content preview:', content.substring(0, 500));
+      
       return new Response(
-        JSON.stringify({ 
+        JSON.stringify({
           error: 'Failed to parse OpenRouter response as JSON',
-          rawResponse: content 
+          rawResponse: content.substring(0, 1000), // Limit size for debugging
+          parseError: parseError instanceof Error ? parseError.message : 'Unknown parsing error'
+        }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    // Validate and normalize the response structure
+    try {
+      parsedResponse = validateGrammarResponse(parsedResponse, text);
+    } catch (validationError: unknown) {
+      console.error('Response validation failed:', validationError);
+      
+      return new Response(
+        JSON.stringify({
+          error: 'Invalid response structure from OpenRouter API',
+          validationError: validationError instanceof Error ? validationError.message : 'Unknown validation error',
+          rawResponse: content.substring(0, 500)
         }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       );

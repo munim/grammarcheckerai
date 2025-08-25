@@ -37,6 +37,13 @@ export class OpenRouterClient {
     }
 
     const data = await response.json();
+    console.log('OpenRouter API response:', JSON.stringify(data, null, 2));
+    
+    // Validate that we have the expected structure
+    if (!data.choices || !Array.isArray(data.choices) || data.choices.length === 0) {
+      throw new Error('Invalid response structure from OpenRouter API');
+    }
+    
     return data;
   }
 

@@ -78,10 +78,16 @@ export default function Home() {
         }),
       });
       
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        console.error('Failed to parse response as JSON:', jsonError);
+        throw new Error('Invalid response from server');
+      }
       
       if (!response.ok) {
-        throw new Error(data.error || 'An error occurred while checking grammar');
+        throw new Error(data?.error || 'An error occurred while checking grammar');
       }
       
       setCorrectedText(data.correctedText);
@@ -170,7 +176,7 @@ export default function Home() {
             </div>
           )}
 
-          <CorrectionDisplay correctedText={correctedText} />
+          <CorrectionDisplay originalText={text} correctedText={correctedText} errors={errors} />
           <ErrorTable errors={errors} />
         </div>
 
