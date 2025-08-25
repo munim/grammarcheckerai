@@ -2,13 +2,15 @@
  * Utility functions for handling JSON parsing with potential formatting issues
  */
 
+import { GrammarCheckResponse } from './types';
+
 /**
  * Safely parse JSON content that may contain control characters or formatting issues
  * @param content - The raw JSON string to parse
  * @returns Parsed JSON object
  * @throws Error if parsing fails after all attempts
  */
-export function safeJsonParse(content: string): any {
+export function safeJsonParse(content: string): unknown {
   // First attempt: try parsing as-is after trimming
   let cleanedContent = content.trim();
   
@@ -144,16 +146,16 @@ export function safeJsonParse(content: string): any {
  * @param fallbackText - Fallback text to use if correctedText is missing
  * @returns Validated and normalized grammar correction object
  */
-export function validateGrammarResponse(obj: any, fallbackText: string = ''): any {
+export function validateGrammarResponse(obj: unknown, fallbackText: string = ''): GrammarCheckResponse {
   if (!obj || typeof obj !== 'object') {
     throw new Error('Invalid response: not an object');
   }
 
   // Ensure required fields exist with fallbacks
   const result = {
-    correctedText: obj.correctedText || fallbackText,
-    errors: Array.isArray(obj.errors) ? obj.errors : [],
-    confidence: typeof obj.confidence === 'number' ? obj.confidence : 0.5
+    correctedText: (obj as GrammarCheckResponse).correctedText || fallbackText,
+    errors: Array.isArray((obj as GrammarCheckResponse).errors) ? (obj as GrammarCheckResponse).errors : [],
+    confidence: typeof (obj as GrammarCheckResponse).confidence === 'number' ? (obj as GrammarCheckResponse).confidence : 0.5
   };
 
   return result;

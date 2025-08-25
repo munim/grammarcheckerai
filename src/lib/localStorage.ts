@@ -13,7 +13,7 @@ const isLocalStorageAvailable = (): boolean => {
     window.localStorage.setItem(testKey, testKey);
     window.localStorage.removeItem(testKey);
     return true;
-  } catch (e: unknown) {
+  } catch {
     return false;
   }
 };
@@ -25,8 +25,8 @@ export class HistoryManager {
     try {
       const history = localStorage.getItem(HISTORY_KEY);
       return history ? JSON.parse(history) : [];
-    } catch (error: unknown) {
-      console.error('Error reading history from localStorage:', error);
+    } catch (_error: unknown) {
+      console.error('Error reading history from localStorage:', _error);
       return [];
     }
   }
@@ -44,8 +44,8 @@ export class HistoryManager {
       }
       
       localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-    } catch (error: unknown) {
-      console.error('Error saving correction to localStorage:', error);
+    } catch (_error: unknown) {
+      console.error('Error saving correction to localStorage:', _error);
     }
   }
 
@@ -56,8 +56,8 @@ export class HistoryManager {
       const history = this.getHistory();
       const updatedHistory = history.filter(item => item.id !== id);
       localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedHistory));
-    } catch (error: unknown) {
-      console.error('Error deleting correction from localStorage:', error);
+    } catch (_error: unknown) {
+      console.error('Error deleting correction from localStorage:', _error);
     }
   }
 
@@ -66,8 +66,8 @@ export class HistoryManager {
     
     try {
       localStorage.removeItem(HISTORY_KEY);
-    } catch (error: unknown) {
-      console.error('Error clearing history from localStorage:', error);
+    } catch (_error: unknown) {
+      console.error('Error clearing history from localStorage:', _error);
     }
   }
 
@@ -77,8 +77,8 @@ export class HistoryManager {
     try {
       const preferences = localStorage.getItem(LANGUAGE_PREFERENCES_KEY);
       return preferences ? JSON.parse(preferences) : null;
-    } catch (error: unknown) {
-      console.error('Error reading language preferences from localStorage:', error);
+    } catch (_error: unknown) {
+      console.error('Error reading language preferences from localStorage:', _error);
       return null;
     }
   }
@@ -89,8 +89,8 @@ export class HistoryManager {
     try {
       const preferences = { inputLanguage, explanationLanguage };
       localStorage.setItem(LANGUAGE_PREFERENCES_KEY, JSON.stringify(preferences));
-    } catch (error: unknown) {
-      console.error('Error saving language preferences to localStorage:', error);
+    } catch (_error: unknown) {
+      console.error('Error saving language preferences to localStorage:', _error);
     }
   }
 }

@@ -31,7 +31,7 @@ export default function AboutPage() {
             </h3>
             
             <p className="text-gray-700 dark:text-gray-300 mb-4">
-              When you submit text for grammar checking, the tool sends your text to OpenRouter's API, 
+              When you submit text for grammar checking, the tool sends your text to OpenRouter&#39;s API, 
               which routes it to an appropriate LLM. The LLM analyzes your text for grammatical errors, 
               provides corrections, and explains each error in a structured format.
             </p>
@@ -71,7 +71,7 @@ export default function AboutPage() {
                 Privacy Notice
               </h4>
               <p className="text-blue-700 dark:text-blue-200">
-                Your text is sent to OpenRouter's API for processing. We do not store your text on our servers.
+                Your text is sent to OpenRouter&#39;s API for processing. We do not store your text on our servers.
                 All data is processed in real-time and discarded after the response is generated.
               </p>
             </div>
