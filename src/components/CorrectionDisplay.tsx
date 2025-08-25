@@ -49,7 +49,7 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
             content={`Error: ${error.explanation}`}
             position="top"
           >
-            <span className="bg-red-100 text-red-800 line-through px-1 rounded dark:bg-red-900/30 dark:text-red-300">
+            <span className="bg-red-100 text-red-800 line-through px-1 rounded dark:bg-red-900/30 dark:text-red-200">
               {error.original}
             </span>
           </Tooltip>
@@ -107,7 +107,7 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
             content={`Corrected from: "${error.original}" - ${error.explanation}`}
             position="top"
           >
-            <span className="bg-green-100 text-green-800 font-medium underline decoration-2 px-1 rounded dark:bg-green-900/30 dark:text-green-300">
+            <span className="bg-green-100 text-green-800 font-medium underline decoration-2 px-1 rounded dark:bg-green-900/30 dark:text-green-200">
               {error.corrected}
             </span>
           </Tooltip>
@@ -168,11 +168,11 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
         // Add the inline comparison: original → corrected
         parts.push(
           <span key={`comparison-${i}`} className="inline-flex items-center gap-1">
-            <span className="bg-red-100 text-red-800 line-through px-1 rounded text-sm dark:bg-red-900/30 dark:text-red-300">
+            <span className="bg-red-100 text-red-800 line-through px-1 rounded text-sm dark:bg-red-900/30 dark:text-red-200">
               {error.original}
             </span>
             <span className="text-gray-500 dark:text-gray-400">→</span>
-            <span className="bg-green-100 text-green-800 font-medium px-1 rounded text-sm dark:bg-green-900/30 dark:text-green-300">
+            <span className="bg-green-100 text-green-800 font-medium px-1 rounded text-sm dark:bg-green-900/30 dark:text-green-200">
               {error.corrected}
             </span>
           </span>
@@ -222,7 +222,7 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
             onClick={() => setShowComparison(false)}
             className={`px-3 py-1 text-sm rounded-md transition-colors ${
               !showComparison
-                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200'
                 : 'text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200'
             }`}
           >
@@ -232,7 +232,7 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
             onClick={() => setShowComparison(true)}
             className={`px-3 py-1 text-sm rounded-md transition-colors ${
               showComparison
-                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200'
                 : 'text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200'
             }`}
           >
@@ -248,7 +248,7 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
           </p>
           {errors && errors.length > 0 && showHighlighting && (
             <div className="mt-3 pt-3 border-t border-green-200 dark:border-green-700">
-              <p className="text-sm text-green-700 dark:text-green-300">
+              <p className="text-sm text-green-700 dark:text-green-200">
                 <span className="inline-block w-3 h-3 bg-green-100 dark:bg-green-900/30 rounded mr-2"></span>
                 Corrections are highlighted and underlined. Hover for details.
               </p>
@@ -258,14 +258,14 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
       ) : (
         <div className="space-y-4">
           <div className="p-4 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-800">
-            <h3 className="text-sm font-medium text-red-800 dark:text-red-300 mb-2">Original (with errors)</h3>
+            <h3 className="text-sm font-medium text-red-800 dark:text-red-200 mb-2">Original (with errors)</h3>
             <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
               {renderOriginalWithErrors()}
             </p>
           </div>
           
           <div className="p-4 bg-green-50 border border-green-200 rounded-lg dark:bg-green-900/20 dark:border-green-800">
-            <h3 className="text-sm font-medium text-green-800 dark:text-green-300 mb-2">Corrected</h3>
+            <h3 className="text-sm font-medium text-green-800 dark:text-green-200 mb-2">Corrected</h3>
             <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
               {renderCorrectedText()}
             </p>

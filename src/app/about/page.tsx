@@ -70,8 +70,8 @@ export default function AboutPage() {
               <h4 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
                 Privacy Notice
               </h4>
-              <p className="text-blue-700 dark:text-blue-300">
-                Your text is sent to OpenRouter's API for processing. We do not store your text on our servers. 
+              <p className="text-blue-700 dark:text-blue-200">
+                Your text is sent to OpenRouter's API for processing. We do not store your text on our servers.
                 All data is processed in real-time and discarded after the response is generated.
               </p>
             </div>

@@ -44,13 +44,13 @@ export default function HistoryPanel({ history, onRestore, onDelete, onClearAll 
             <div className="inline-flex rounded-md shadow-sm" role="group">
               <button
                 onClick={handleExport}
-                className="px-3 py-1 text-sm bg-green-100 hover:bg-green-200 text-green-800 rounded-l-md dark:bg-green-900/30 dark:hover:bg-green-900/50 dark:text-green-200"
+                className="px-3 py-1 text-sm bg-green-100 hover:bg-green-200 text-green-800 rounded-l-md dark:bg-green-900/30 dark:hover:bg-green-900/50 dark:text-green-300"
               >
                 Export
               </button>
               <button
                 onClick={onClearAll}
-                className="px-3 py-1 text-sm bg-red-100 hover:bg-red-200 text-red-800 rounded-r-md dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-200"
+                className="px-3 py-1 text-sm bg-red-100 hover:bg-red-200 text-red-800 rounded-r-md dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-300"
               >
                 Clear All
               </button>
@@ -81,13 +81,13 @@ export default function HistoryPanel({ history, onRestore, onDelete, onClearAll 
                     <div className="flex space-x-2 ml-2">
                       <button
                         onClick={() => onRestore(item)}
-                        className="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-200"
+                        className="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 rounded dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-300"
                       >
                         Restore
                       </button>
                       <button
                         onClick={() => onDelete(item.id)}
-                        className="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-200"
+                        className="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-300"
                       >
                         Delete
                       </button>
