@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
 import TextInput from '@/components/TextInput';
 import CorrectionDisplay from '@/components/CorrectionDisplay';
@@ -129,16 +130,28 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-            Grammar Correction Tool
-          </h1>
-          <p className="mt-3 text-lg text-gray-600 dark:text-gray-400">
-            Check your text for grammar errors and get intelligent corrections
-          </p>
-        </div>
+        <header className="mb-10">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+                Grammar Correction Tool
+              </h1>
+              <p className="mt-3 text-lg text-gray-600 dark:text-gray-400">
+                Check your text for grammar errors and get intelligent corrections
+              </p>
+            </div>
+            <nav>
+              <Link 
+                href="/about" 
+                className="text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+              >
+                About
+              </Link>
+            </nav>
+          </div>
+        </header>
 
         <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
