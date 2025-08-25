@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { GrammarError } from '@/lib/types';
+import Tooltip from './Tooltip';
 
 interface CorrectionDisplayProps {
   originalText: string;
@@ -43,13 +44,15 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
 
         // Add the original error text with strikethrough and red background
         parts.push(
-          <span
+          <Tooltip
             key={`error-${i}`}
-            className="bg-red-100 text-red-800 line-through px-1 rounded dark:bg-red-900/30 dark:text-red-300"
-            title={`Error: ${error.explanation}`}
+            content={`Error: ${error.explanation}`}
+            position="top"
           >
-            {error.original}
-          </span>
+            <span className="bg-red-100 text-red-800 line-through px-1 rounded dark:bg-red-900/30 dark:text-red-300">
+              {error.original}
+            </span>
+          </Tooltip>
         );
 
         // Move past this error
@@ -99,13 +102,15 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
 
         // Add the corrected text with green background and underline
         parts.push(
-          <span
+          <Tooltip
             key={`correction-${i}`}
-            className="bg-green-100 text-green-800 font-medium underline decoration-2 px-1 rounded dark:bg-green-900/30 dark:text-green-300"
-            title={`Corrected from: "${error.original}" - ${error.explanation}`}
+            content={`Corrected from: "${error.original}" - ${error.explanation}`}
+            position="top"
           >
-            {error.corrected}
-          </span>
+            <span className="bg-green-100 text-green-800 font-medium underline decoration-2 px-1 rounded dark:bg-green-900/30 dark:text-green-300">
+              {error.corrected}
+            </span>
+          </Tooltip>
         );
 
         // Move past this correction
