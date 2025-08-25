@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 interface TooltipProps {
   content: string;
@@ -110,7 +111,7 @@ export default function Tooltip({
         {children}
       </span>
       
-      {isVisible && (
+      {isVisible && typeof document !== 'undefined' && createPortal(
         <div
           ref={tooltipRef}
           className="fixed z-50 px-3 py-2 text-sm text-white bg-gray-900 rounded-lg shadow-lg dark:bg-gray-100 dark:text-gray-900 max-w-xs break-words pointer-events-none"
@@ -121,7 +122,8 @@ export default function Tooltip({
         >
           {content}
           <div className={getArrowClasses()} />
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
