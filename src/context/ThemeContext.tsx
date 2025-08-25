@@ -29,14 +29,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
     
     setActualTheme(resolvedTheme);
-    
-    // Apply theme classes to document
-    const root = document.documentElement;
-    if (resolvedTheme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
   }, []);
 
   // Apply theme to document and update actualTheme when theme changes
