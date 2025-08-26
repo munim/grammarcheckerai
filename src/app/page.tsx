@@ -11,6 +11,12 @@ import HistoryPanel from '@/components/HistoryPanel';
 import { GrammarCorrection, GrammarError } from '@/lib/types';
 import { HistoryManager } from '@/lib/localStorage';
 
+declare global {
+  interface Window {
+    setTurnstileTokenCallback: (token: string) => void;
+  }
+}
+
 export default function Home() {
   const [text, setText] = useState('');
   const [inputLanguage, setInputLanguage] = useState('English');
@@ -20,6 +26,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<GrammarCorrection[]>([]);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   // Common languages for the selectors
   const languages = [
@@ -45,6 +52,16 @@ export default function Home() {
       setInputLanguage(savedPreferences.inputLanguage);
       setExplanationLanguage(savedPreferences.explanationLanguage);
     }
+
+    // Attach the callback to the window object
+    window.setTurnstileTokenCallback = (token: string) => {
+      setTurnstileToken(token);
+    };
+
+    // Cleanup function to remove the callback from the window object
+    return () => {
+      delete window.setTurnstileTokenCallback;
+    };
   }, []);
 
   // Update history when corrections are made
@@ -62,6 +79,10 @@ export default function Home() {
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
+    if (!turnstileToken) {
+      setError("Please complete the Turnstile challenge.");
+      return;
+    }
     
     setIsLoading(true);
     setError(null);
@@ -76,6 +97,7 @@ export default function Home() {
           text,
           inputLanguage,
           explanationLanguage,
+          turnstileToken,
         }),
       });
       
@@ -182,6 +204,12 @@ export default function Home() {
             onSubmit={handleSubmit}
             isLoading={isLoading}
           />
+
+          <div
+            className="cf-turnstile mt-4"
+            data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+            data-callback="setTurnstileTokenCallback"
+          ></div>
 
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-800">

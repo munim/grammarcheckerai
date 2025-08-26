@@ -20,6 +20,7 @@ export interface GrammarCheckRequest {
   text: string;
   inputLanguage: string;
   explanationLanguage: string;
+  turnstileToken: string;
 }
 
 export interface GrammarCheckResponse {

@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { OpenRouterClient } from '@/lib/openrouter';
 import { GrammarCheckRequest } from '@/lib/types';
 import { safeJsonParse, validateGrammarResponse } from '@/lib/json-utils';
+import { verifyTurnstile } from '@/lib/turnstile';
 
 export const runtime = 'edge';
 
@@ -15,7 +16,16 @@ interface OpenRouterResponse {
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, inputLanguage, explanationLanguage }: GrammarCheckRequest = await request.json();
+    const { text, inputLanguage, explanationLanguage, turnstileToken }: GrammarCheckRequest = await request.json();
+
+    // Verify Turnstile token
+    const isTurnstileValid = await verifyTurnstile(turnstileToken);
+    if (!isTurnstileValid) {
+      return new Response(
+        JSON.stringify({ error: 'Turnstile verification failed' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
     
     // Validate input
     if (!text || typeof text !== 'string' || text.trim().length === 0) {
