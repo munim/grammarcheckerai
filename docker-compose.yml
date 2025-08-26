@@ -1,8 +1,15 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        - NEXT_PUBLIC_TURNSTILE_SITE_KEY=${NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+        - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
+        - NEXT_PUBLIC_TURNSTILE_ENABLED=${NEXT_PUBLIC_TURNSTILE_ENABLED}
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     environment:
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
