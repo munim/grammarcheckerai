@@ -13,7 +13,7 @@ import { HistoryManager } from '@/lib/localStorage';
 
 declare global {
   interface Window {
-    setTurnstileTokenCallback: (token: string) => void;
+    setTurnstileTokenCallback?: (token: string) => void;
   }
 }
 
@@ -61,7 +61,7 @@ export default function Home() {
 
     // Cleanup function to remove the callback from the window object
     return () => {
-      delete window.setTurnstileTokenCallback;
+      window.setTurnstileTokenCallback = undefined;
     };
   }, []);
 
