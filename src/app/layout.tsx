@@ -25,6 +25,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Check if Turnstile is enabled (defaults to true if not set)
+  const isTurnstileEnabled = process.env.NEXT_PUBLIC_TURNSTILE_ENABLED !== 'false';
+  
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -50,7 +53,9 @@ export default function RootLayout({
             `,
           }}
         />
-        <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
+        {isTurnstileEnabled && (
+          <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
+        )}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900`}
