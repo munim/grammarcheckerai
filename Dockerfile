@@ -13,7 +13,10 @@ RUN npm ci --legacy-peer-deps
 # Copy the rest of the application code
 COPY . .
 
-# Build the Next.js application
+# Build the Next.js application with environment variables
+ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY
+ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY
+
 RUN npm run build
 
 # Expose the port the app runs on
