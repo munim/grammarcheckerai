@@ -1,23 +1,5 @@
-version: '3.8'
-
 services:
   app:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
-      - NEXT_PUBLIC_TURNSTILE_SITE_KEY=${NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-      - NEXT_PUBLIC_TURNSTILE_ENABLED=${NEXT_PUBLIC_TURNSTILE_ENABLED}
-      - NEXTJS_URL=${NEXTJS_URL}
-      - OPENROUTER_MODEL=${OPENROUTER_MODEL}
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: npm run dev
-
-  app-prod:
     build: .
     ports:
       - "3000:3000"
