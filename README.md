@@ -129,13 +129,14 @@ For detailed documentation, please see the [docs](docs/) directory:
 
 ## Environment Variables
 
-The application uses the following environment variables:
+The application requires several environment variables to be set. Copy the `.env.example` file to `.env` and update the values:
 
 - `OPENROUTER_API_KEY` - Your OpenRouter API key (required)
-- `NEXTJS_URL` - The URL where your application is hosted (required for API referer)
-- `OPENROUTER_MODEL` - The OpenRouter model to use (optional, defaults to `mistralai/mistral-7b-instruct:free`)
+- `TURNSTILE_SECRET_KEY` - Your Cloudflare Turnstile secret key (required for production)
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` - Your Cloudflare Turnstile site key (required for frontend widget)
-- `TURNSTILE_SECRET_KEY` - Your Cloudflare Turnstile secret key (required for backend verification)
+- `NEXT_PUBLIC_TURNSTILE_ENABLED` - Enable or disable Turnstile verification (optional, defaults to true)
+- `NEXTJS_URL` - Your application URL (required for production)
+- `OPENROUTER_MODEL` - The OpenRouter model to use (optional, defaults to mistralai/mistral-7b-instruct:free)
 
 ## Deployment
 

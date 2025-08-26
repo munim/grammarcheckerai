@@ -29,6 +29,9 @@ export default function Home() {
   const [history, setHistory] = useState<GrammarCorrection[]>([]);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
+  // Check if Turnstile is enabled (defaults to true if not set)
+  const isTurnstileEnabled = process.env.NEXT_PUBLIC_TURNSTILE_ENABLED !== 'false';
+
   // Common languages for the selectors
   const languages = [
     { code: 'English', name: 'English' },
@@ -54,16 +57,18 @@ export default function Home() {
       setExplanationLanguage(savedPreferences.explanationLanguage);
     }
 
-    // Attach the callback to the window object
-    window.setTurnstileTokenCallback = (token: string) => {
-      setTurnstileToken(token);
-    };
+    // Only attach the callback if Turnstile is enabled
+    if (isTurnstileEnabled) {
+      window.setTurnstileTokenCallback = (token: string) => {
+        setTurnstileToken(token);
+      };
+    }
 
     // Cleanup function to remove the callback from the window object
     return () => {
       window.setTurnstileTokenCallback = undefined;
     };
-  }, []);
+  }, [isTurnstileEnabled]);
 
   // Update history when corrections are made
   const updateHistory = () => {
@@ -81,7 +86,9 @@ export default function Home() {
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
-    if (!turnstileToken) {
+    
+    // Only check for Turnstile token if Turnstile is enabled
+    if (isTurnstileEnabled && !turnstileToken) {
       setError("Please complete the Turnstile challenge.");
       return;
     }
@@ -100,7 +107,7 @@ export default function Home() {
           inputLanguage,
           explanationLanguage,
           targetLanguage: explanationLanguage,
-          turnstileToken,
+          turnstileToken: isTurnstileEnabled ? turnstileToken : null,
         }),
       });
       
@@ -212,11 +219,13 @@ export default function Home() {
             isLoading={isLoading}
           />
 
-          <div
-            className="cf-turnstile mt-4"
-            data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-            data-callback="setTurnstileTokenCallback"
-          ></div>
+          {isTurnstileEnabled && (
+            <div
+              className="cf-turnstile mt-4"
+              data-sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+              data-callback="setTurnstileTokenCallback"
+            ></div>
+          )}
 
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-800">

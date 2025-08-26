@@ -2,19 +2,30 @@ version: '3.8'
 
 services:
   app:
-    build: 
-      context: .
-      args:
-        - NEXT_PUBLIC_TURNSTILE_SITE_KEY=${NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+    build: .
     ports:
       - "3000:3000"
-    env_file:
-      - .env
     environment:
-      - NODE_ENV=production
-      - NEXTJS_URL=${NEXTJS_URL:-http://localhost:3000}
-      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-mistralai/mistral-7b-instruct:free}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
       - NEXT_PUBLIC_TURNSTILE_SITE_KEY=${NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-    restart: unless-stopped
+      - NEXT_PUBLIC_TURNSTILE_ENABLED=${NEXT_PUBLIC_TURNSTILE_ENABLED}
+      - NEXTJS_URL=${NEXTJS_URL}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+
+  app-prod:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
+      - NEXT_PUBLIC_TURNSTILE_SITE_KEY=${NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+      - NEXT_PUBLIC_TURNSTILE_ENABLED=${NEXT_PUBLIC_TURNSTILE_ENABLED}
+      - NEXTJS_URL=${NEXTJS_URL}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL}
+    command: npm run start

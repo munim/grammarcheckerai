@@ -7,6 +7,13 @@ interface TurnstileResponse {
 }
 
 export async function verifyTurnstile(token: string): Promise<boolean> {
+  // Check if Turnstile is enabled (check both TURNSTILE_ENABLED and NEXT_PUBLIC_TURNSTILE_ENABLED for backward compatibility)
+  const isTurnstileEnabled = process.env.TURNSTILE_ENABLED !== 'false' && process.env.NEXT_PUBLIC_TURNSTILE_ENABLED !== 'false';
+  
+  if (!isTurnstileEnabled) {
+    return true;
+  }
+
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
   if (!secretKey) {
     console.error('TURNSTILE_SECRET_KEY is not set');

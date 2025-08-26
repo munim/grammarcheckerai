@@ -54,7 +54,7 @@ describe('OpenRouterClient', () => {
       // Check that the body contains the expected content
       const call = (fetch as jest.Mock).mock.calls[0];
       const body = JSON.parse(call[1].body);
-      expect(body.model).toBe('mistralai/mistral-7b-instruct:free');
+      expect(body.model).toBe('qwen/qwen3-30b-a3b:free');
       expect(body.messages[0].role).toBe('user');
       expect(body.messages[0].content).toContain(text);
       expect(body.messages[0].content).toContain(targetLanguage);
