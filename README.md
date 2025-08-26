@@ -8,12 +8,14 @@ A mobile-first web application that analyzes user-submitted text for grammar err
 
 - **Text Analysis**: Check sentences or paragraphs for grammar errors
 - **Intelligent Corrections**: Get rewritten, grammatically correct versions of your text
+- **Text Translation**: Translate the corrected text into the same language as the explanation language.
 - **Error Documentation**: View detailed information about grammar issues in a structured table
 - **Multi-language Support**: Select input text language and preferred language for error explanations
 - **History Management**: Store correction history in localStorage for easy reference
 - **Export History**: Export your correction history as JSON
 - **Keyboard Shortcuts**: Use Ctrl+Enter to quickly submit text
 - **Mobile-First Design**: Optimized for all device sizes with responsive design
+- **Bot Protection**: Integrated with Cloudflare Turnstile to prevent automated abuse.
 
 ## Getting Started
 
@@ -132,6 +134,8 @@ The application uses the following environment variables:
 - `OPENROUTER_API_KEY` - Your OpenRouter API key (required)
 - `NEXTJS_URL` - The URL where your application is hosted (required for API referer)
 - `OPENROUTER_MODEL` - The OpenRouter model to use (optional, defaults to `mistralai/mistral-7b-instruct:free`)
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY` - Your Cloudflare Turnstile site key (required for frontend widget)
+- `TURNSTILE_SECRET_KEY` - Your Cloudflare Turnstile secret key (required for backend verification)
 
 ## Deployment
 
