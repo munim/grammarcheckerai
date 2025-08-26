@@ -7,7 +7,7 @@ services:
         - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
         - NEXT_PUBLIC_TURNSTILE_ENABLED=${NEXT_PUBLIC_TURNSTILE_ENABLED}
     ports:
-      - "3000:3000"
+      - "${HOST_PORT:-3000}:3000"
     env_file:
       - .env
     environment:
