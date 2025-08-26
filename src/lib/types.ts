@@ -14,12 +14,15 @@ export interface GrammarCorrection {
   errors: GrammarError[];
   inputLanguage: string;
   explanationLanguage: string;
+  translatedText?: string;
+  targetLanguage?: string;
 }
 
 export interface GrammarCheckRequest {
   text: string;
   inputLanguage: string;
   explanationLanguage: string;
+  targetLanguage: string;
   turnstileToken: string;
 }
 
@@ -27,4 +30,5 @@ export interface GrammarCheckResponse {
   correctedText: string;
   errors: GrammarError[];
   confidence: number;
+  translatedText?: string;
 }

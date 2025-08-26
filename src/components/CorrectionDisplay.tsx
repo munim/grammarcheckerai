@@ -6,10 +6,12 @@ interface CorrectionDisplayProps {
   originalText: string;
   correctedText: string;
   errors: GrammarError[];
+  translatedText?: string;
+  targetLanguage?: string;
 }
 
-export default function CorrectionDisplay({ originalText, correctedText, errors }: CorrectionDisplayProps) {
-  const [showComparison, setShowComparison] = useState(false);
+export default function CorrectionDisplay({ originalText, correctedText, errors, translatedText, targetLanguage }: CorrectionDisplayProps) {
+  const [activeTab, setActiveTab] = useState('final');
   const [showHighlighting, setShowHighlighting] = useState(true);
 
   if (!correctedText) return null;
@@ -219,9 +221,9 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
             )}
           </button>
           <button
-            onClick={() => setShowComparison(false)}
+            onClick={() => setActiveTab('final')}
             className={`px-3 py-1 text-sm rounded-md transition-colors ${
-              !showComparison
+              activeTab === 'final'
                 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200'
                 : 'text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200'
             }`}
@@ -229,19 +231,31 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
             Final
           </button>
           <button
-            onClick={() => setShowComparison(true)}
+            onClick={() => setActiveTab('compare')}
             className={`px-3 py-1 text-sm rounded-md transition-colors ${
-              showComparison
+              activeTab === 'compare'
                 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200'
                 : 'text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200'
             }`}
           >
             Compare
           </button>
+          {translatedText && targetLanguage && (
+            <button
+              onClick={() => setActiveTab('translation')}
+              className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                activeTab === 'translation'
+                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200'
+                  : 'text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200'
+              }`}
+            >
+              Translation
+            </button>
+          )}
         </div>
       </div>
 
-      {!showComparison ? (
+      {activeTab === 'final' && (
         <div className="p-4 bg-green-50 border border-green-200 rounded-lg dark:bg-green-900/20 dark:border-green-800">
           <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
             {showHighlighting ? renderCorrectedText() : renderPlainText()}
@@ -255,7 +269,9 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
             </div>
           )}
         </div>
-      ) : (
+      )}
+      
+      {activeTab === 'compare' && (
         <div className="space-y-4">
           <div className="p-4 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-800">
             <h3 className="text-sm font-medium text-red-800 dark:text-red-200 mb-2">Original (with errors)</h3>
@@ -288,6 +304,17 @@ export default function CorrectionDisplay({ originalText, correctedText, errors 
               <span>Corrections (underlined)</span>
             </div>
           </div>
+        </div>
+      )}
+
+      {activeTab === 'translation' && (
+        <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg dark:bg-purple-900/20 dark:border-purple-800">
+          <h3 className="text-sm font-medium text-purple-800 dark:text-purple-200 mb-2">
+            Translated to {targetLanguage}
+          </h3>
+          <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
+            {translatedText}
+          </p>
         </div>
       )}
     </div>

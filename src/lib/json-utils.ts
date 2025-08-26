@@ -152,10 +152,11 @@ export function validateGrammarResponse(obj: unknown, fallbackText: string = '')
   }
 
   // Ensure required fields exist with fallbacks
-  const result = {
+  const result: GrammarCheckResponse = {
     correctedText: (obj as GrammarCheckResponse).correctedText || fallbackText,
     errors: Array.isArray((obj as GrammarCheckResponse).errors) ? (obj as GrammarCheckResponse).errors : [],
-    confidence: typeof (obj as GrammarCheckResponse).confidence === 'number' ? (obj as GrammarCheckResponse).confidence : 0.5
+    confidence: typeof (obj as GrammarCheckResponse).confidence === 'number' ? (obj as GrammarCheckResponse).confidence : 0.5,
+    translatedText: (obj as GrammarCheckResponse).translatedText
   };
 
   return result;

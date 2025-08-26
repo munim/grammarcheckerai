@@ -23,6 +23,7 @@ export default function Home() {
   const [explanationLanguage, setExplanationLanguage] = useState('English');
   const [correctedText, setCorrectedText] = useState('');
   const [errors, setErrors] = useState<GrammarError[]>([]);
+  const [translatedText, setTranslatedText] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<GrammarCorrection[]>([]);
@@ -74,6 +75,7 @@ export default function Home() {
     setText('');
     setCorrectedText('');
     setErrors([]);
+    setTranslatedText(undefined);
     setError(null);
   };
 
@@ -97,6 +99,7 @@ export default function Home() {
           text,
           inputLanguage,
           explanationLanguage,
+          targetLanguage: explanationLanguage,
           turnstileToken,
         }),
       });
@@ -115,6 +118,7 @@ export default function Home() {
       
       setCorrectedText(data.correctedText);
       setErrors(data.errors || []);
+      setTranslatedText(data.translatedText);
       
       // Save to history
       const correction: GrammarCorrection = {
@@ -125,6 +129,8 @@ export default function Home() {
         errors: data.errors || [],
         inputLanguage,
         explanationLanguage,
+        translatedText: data.translatedText,
+        targetLanguage: explanationLanguage,
       };
       
       HistoryManager.saveCorrection(correction);
@@ -146,6 +152,7 @@ export default function Home() {
     setErrors(correction.errors);
     setInputLanguage(correction.inputLanguage);
     setExplanationLanguage(correction.explanationLanguage);
+    setTranslatedText(correction.translatedText);
     
     // Save language preferences when restoring
     HistoryManager.saveLanguagePreferences(correction.inputLanguage, correction.explanationLanguage);
@@ -217,7 +224,7 @@ export default function Home() {
             </div>
           )}
 
-          <CorrectionDisplay originalText={text} correctedText={correctedText} errors={errors} />
+          <CorrectionDisplay originalText={text} correctedText={correctedText} errors={errors} translatedText={translatedText} targetLanguage={explanationLanguage} />
           <ErrorTable errors={errors} />
         </div>
 

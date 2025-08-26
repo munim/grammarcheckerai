@@ -25,6 +25,7 @@ describe('POST /api/grammar-check', () => {
         text: 'This is a test.',
         inputLanguage: 'en',
         explanationLanguage: 'en',
+        targetLanguage: 'fr',
         turnstileToken: 'invalid-token',
       }),
     }) as NextRequest;
@@ -46,6 +47,7 @@ describe('POST /api/grammar-check', () => {
             content: JSON.stringify({
               correctedText: 'This is a test.',
               errors: [],
+              translatedText: 'Ceci est un test.'
             }),
           },
         },
@@ -59,6 +61,7 @@ describe('POST /api/grammar-check', () => {
         text: 'This is a test.',
         inputLanguage: 'en',
         explanationLanguage: 'en',
+        targetLanguage: 'fr',
         turnstileToken: 'valid-token',
       }),
     }) as NextRequest;
@@ -68,7 +71,8 @@ describe('POST /api/grammar-check', () => {
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body.correctedText).toBe('This is a test.');
+    expect(body.translatedText).toBe('Ceci est un test.');
     expect(mockVerifyTurnstile).toHaveBeenCalledWith('valid-token');
-    expect(mockCheckGrammar).toHaveBeenCalledWith('This is a test.', 'en', 'en');
+    expect(mockCheckGrammar).toHaveBeenCalledWith('This is a test.', 'en', 'en', 'fr');
   });
 });

@@ -111,4 +111,50 @@ describe('CorrectionDisplay', () => {
     expect(highlightedTextAgain).toBeInTheDocument();
     expect(highlightedTextAgain).toHaveClass('bg-green-100');
   });
+
+  it('should render translation tab when translatedText is provided', () => {
+    const originalText = "This is wrong text.";
+    const correctedText = "This is correct text.";
+    const errors: GrammarError[] = [];
+    const translatedText = "Ceci est le texte correct.";
+    const targetLanguage = "French";
+
+    render(
+      <CorrectionDisplay
+        originalText={originalText}
+        correctedText={correctedText}
+        errors={errors}
+        translatedText={translatedText}
+        targetLanguage={targetLanguage}
+      />
+    );
+
+    const translationButton = screen.getByText('Translation');
+    expect(translationButton).toBeInTheDocument();
+
+    fireEvent.click(translationButton);
+
+    const translationHeader = screen.getByText(`Translated to ${targetLanguage}`);
+    expect(translationHeader).toBeInTheDocument();
+
+    const translatedContent = screen.getByText(translatedText);
+    expect(translatedContent).toBeInTheDocument();
+  });
+
+  it('should not render translation tab when translatedText is not provided', () => {
+    const originalText = "This is wrong text.";
+    const correctedText = "This is correct text.";
+    const errors: GrammarError[] = [];
+
+    render(
+      <CorrectionDisplay
+        originalText={originalText}
+        correctedText={correctedText}
+        errors={errors}
+      />
+    );
+
+    const translationButton = screen.queryByText('Translation');
+    expect(translationButton).not.toBeInTheDocument();
+  });
 });

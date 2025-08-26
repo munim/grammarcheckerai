@@ -9,8 +9,8 @@ export class OpenRouterClient {
     this.model = process.env.OPENROUTER_MODEL || 'mistralai/mistral-7b-instruct:free';
   }
 
-  async checkGrammar(text: string, inputLanguage: string, explanationLanguage: string): Promise<unknown> {
-    const prompt = this.createPrompt(text, inputLanguage, explanationLanguage);
+  async checkGrammar(text: string, inputLanguage: string, explanationLanguage: string, targetLanguage: string): Promise<unknown> {
+    const prompt = this.createPrompt(text, inputLanguage, explanationLanguage, targetLanguage);
     
     const response = await fetch(`${this.baseUrl}/chat/completions`, {
       method: 'POST',
@@ -47,8 +47,8 @@ export class OpenRouterClient {
     return data;
   }
 
-  private createPrompt(text: string, inputLanguage: string, explanationLanguage: string): string {
-    return `You are a grammar correction expert. Analyze the following ${inputLanguage} text for grammar errors and provide corrections.
+  private createPrompt(text: string, inputLanguage: string, explanationLanguage: string, targetLanguage: string): string {
+    return `You are a grammar correction expert. Analyze the following ${inputLanguage} text for grammar errors and provide corrections. Also, translate the corrected text to ${targetLanguage}.
 
 Text to analyze: "${text}"
 
@@ -64,15 +64,17 @@ Please respond with a JSON object in this exact format:
       "position": position_in_text
     }
   ],
-  "confidence": 0.95
+  "confidence": 0.95,
+  "translatedText": "translation of the corrected text to ${targetLanguage}"
 }
 
 Important instructions:
 1. Identify all grammar errors in the text
 2. Provide corrected versions
 3. Explain each error in ${explanationLanguage}
-4. Return ONLY valid JSON
-5. If no errors are found, return an empty errors array
-6. Ensure the correctedText is a fully corrected version of the input`;
+4. Translate the corrected text to ${targetLanguage}
+5. Return ONLY valid JSON
+6. If no errors are found, return an empty errors array
+7. Ensure the correctedText is a fully corrected version of the input`;
   }
 }

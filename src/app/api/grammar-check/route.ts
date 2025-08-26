@@ -16,7 +16,7 @@ interface OpenRouterResponse {
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, inputLanguage, explanationLanguage, turnstileToken }: GrammarCheckRequest = await request.json();
+    const { text, inputLanguage, explanationLanguage, targetLanguage, turnstileToken }: GrammarCheckRequest = await request.json();
 
     // Verify Turnstile token
     const isTurnstileValid = await verifyTurnstile(turnstileToken);
@@ -55,7 +55,8 @@ export async function POST(request: NextRequest) {
     const client = new OpenRouterClient(apiKey);
     
     // Call OpenRouter API
-    const response: OpenRouterResponse = await client.checkGrammar(text, inputLanguage, explanationLanguage) as OpenRouterResponse;
+    const finalTargetLanguage = targetLanguage || explanationLanguage;
+    const response: OpenRouterResponse = await client.checkGrammar(text, inputLanguage, explanationLanguage, finalTargetLanguage) as OpenRouterResponse;
     
     // Extract the content from the response
     const content = response.choices[0]?.message?.content;

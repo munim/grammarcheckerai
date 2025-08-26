@@ -20,7 +20,8 @@ describe('OpenRouterClient', () => {
             content: JSON.stringify({
               correctedText: 'This is a corrected sentence.',
               errors: [],
-              confidence: 0.95
+              confidence: 0.95,
+              translatedText: 'Ceci est une phrase corrigée.'
             })
           }
         }]
@@ -34,8 +35,9 @@ describe('OpenRouterClient', () => {
       const text = 'This is a test.';
       const inputLanguage = 'English';
       const explanationLanguage = 'English';
+      const targetLanguage = 'French';
       
-      await client.checkGrammar(text, inputLanguage, explanationLanguage);
+      await client.checkGrammar(text, inputLanguage, explanationLanguage, targetLanguage);
       
       expect(fetch).toHaveBeenCalledWith(
         'https://openrouter.ai/api/v1/chat/completions',
@@ -55,6 +57,7 @@ describe('OpenRouterClient', () => {
       expect(body.model).toBe('mistralai/mistral-7b-instruct:free');
       expect(body.messages[0].role).toBe('user');
       expect(body.messages[0].content).toContain(text);
+      expect(body.messages[0].content).toContain(targetLanguage);
       expect(body.temperature).toBe(0.7);
       expect(body.response_format.type).toBe('json_object');
     });
@@ -67,7 +70,7 @@ describe('OpenRouterClient', () => {
       });
 
       await expect(
-        client.checkGrammar('Test text', 'English', 'English')
+        client.checkGrammar('Test text', 'English', 'English', 'French')
       ).rejects.toThrow('OpenRouter API error: 401 Unauthorized');
     });
   });
