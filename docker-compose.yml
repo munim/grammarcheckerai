@@ -11,4 +11,7 @@ services:
       - NODE_ENV=production
       - NEXTJS_URL=${NEXTJS_URL:-http://localhost:3000}
       - OPENROUTER_MODEL=${OPENROUTER_MODEL:-mistralai/mistral-7b-instruct:free}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
+      - NEXT_PUBLIC_TURNSTILE_SITE_KEY=${NEXT_PUBLIC_TURNSTILE_SITE_KEY}
     restart: unless-stopped
