@@ -1,6 +1,6 @@
 # Grammar Correction Tool
 
-A mobile-first web application that analyzes user-submitted text for grammar errors and provides intelligent corrections using OpenRouter's LLM API.
+A mobile-first web application that analyzes user-submitted text for grammar errors and provides intelligent corrections. Supports OpenRouter, NVIDIA NIM, and any custom OpenAI-compatible endpoint — selectable on the server via `ACTIVE_PROVIDER`.
 
 ![Grammar Correction Tool Demo](public/screenshot.png)
 
@@ -23,7 +23,10 @@ A mobile-first web application that analyzes user-submitted text for grammar err
 
 - Node.js (version 18 or higher)
 - npm or yarn
-- An OpenRouter API key (free at [openrouter.ai](https://openrouter.ai))
+- Credentials for **one** of the supported LLM providers (selected via `ACTIVE_PROVIDER`)
+  - OpenRouter API key (free at [openrouter.ai](https://openrouter.ai)) — `ACTIVE_PROVIDER=openrouter` (default)
+  - NVIDIA NIM API key (free at [build.nvidia.com](https://build.nvidia.com)) — `ACTIVE_PROVIDER=nvidia`
+  - Any OpenAI-compatible endpoint (LM Studio, Ollama, vLLM, etc.) — `ACTIVE_PROVIDER=custom`
 
 ### Installation
 
@@ -38,11 +41,29 @@ A mobile-first web application that analyzes user-submitted text for grammar err
    npm install
    ```
 
-3. Create a `.env.local` file in the root directory with your OpenRouter API key:
+3. Create a `.env.local` file with the credentials for your chosen provider. Example setups are below; pick **one**.
+
+   **OpenRouter (default):**
    ```env
+   ACTIVE_PROVIDER=openrouter
    OPENROUTER_API_KEY=your_openrouter_api_key_here
    NEXTJS_URL=http://localhost:3000
    OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
+   ```
+
+   **NVIDIA NIM:**
+   ```env
+   ACTIVE_PROVIDER=nvidia
+   NVIDIA_API_KEY=nvapi-your_key_here
+   NVIDIA_MODEL=meta/llama-3.1-70b-instruct
+   ```
+
+   **Custom OpenAI-compatible endpoint:**
+   ```env
+   ACTIVE_PROVIDER=custom
+   CUSTOM_API_KEY=your_key_for_that_endpoint
+   CUSTOM_BASE_URL=https://your-endpoint.example.com/v1
+   CUSTOM_MODEL=gpt-3.5-turbo
    ```
 
 4. Run the development server:
@@ -129,23 +150,44 @@ For detailed documentation, please see the [docs](docs/) directory:
 
 ## Environment Variables
 
-The application requires several environment variables to be set. Copy the `.env.example` file to `.env` and update the values:
+The application requires several environment variables to be set. Copy the `.env.example` file to `.env` and update the values. At minimum you must (a) select a provider with `ACTIVE_PROVIDER` and (b) supply the credentials for that provider.
 
-- `OPENROUTER_API_KEY` - Your OpenRouter API key (required)
+### Provider selection
+
+- `ACTIVE_PROVIDER` — Which provider the server uses for grammar checks. One of `openrouter` (default), `nvidia`, or `custom`.
+
+### OpenRouter (when `ACTIVE_PROVIDER=openrouter`)
+
+- `OPENROUTER_API_KEY` — Your OpenRouter API key *(required for OpenRouter)*
+- `OPENROUTER_MODEL` — OpenRouter model id *(optional, defaults to `mistralai/mistral-7b-instruct:free`)*
+
+### NVIDIA NIM (when `ACTIVE_PROVIDER=nvidia`)
+
+- `NVIDIA_API_KEY` — Your NVIDIA NIM API key *(required for NVIDIA)*
+- `NVIDIA_MODEL` — NIM model id *(optional, defaults to `meta/llama-3.1-70b-instruct`)*
+- `NVIDIA_BASE_URL` — Override NIM endpoint *(optional, defaults to `https://integrate.api.nvidia.com/v1`)*
+
+### Custom OpenAI-compatible endpoint (when `ACTIVE_PROVIDER=custom`)
+
+- `CUSTOM_BASE_URL` — Chat-completions base URL of the endpoint *(required for custom)*
+- `CUSTOM_API_KEY` — Bearer token *(required for custom)*
+- `CUSTOM_MODEL` — Model name to send to the endpoint *(optional, defaults to `gpt-3.5-turbo`)*
+
+### Other
+
 - `TURNSTILE_SECRET_KEY` - Your Cloudflare Turnstile secret key (required for production)
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` - Your Cloudflare Turnstile site key (required for frontend widget)
 - `NEXT_PUBLIC_TURNSTILE_ENABLED` - Enable or disable Turnstile verification (optional, defaults to true)
-- `NEXTJS_URL` - Your application URL (required for production)
-- `OPENROUTER_MODEL` - The OpenRouter model to use (optional, defaults to mistralai/mistral-7b-instruct:free)
+- `NEXTJS_URL` - Your application URL (required for production, used as the OpenRouter Referer header)
 
 ## Deployment
 
 To deploy this application:
 
-1. Set the environment variables in your deployment platform:
-   - `OPENROUTER_API_KEY`
-   - `NEXTJS_URL` (your deployed URL)
-   - `OPENROUTER_MODEL` (optional)
+1. Set the environment variables in your deployment platform. Select a provider with `ACTIVE_PROVIDER` and provide the matching credentials:
+   - **OpenRouter:** `OPENROUTER_API_KEY`, `NEXTJS_URL`, `OPENROUTER_MODEL` (optional)
+   - **NVIDIA NIM:** `NVIDIA_API_KEY`, `NVIDIA_MODEL` (optional), `NVIDIA_BASE_URL` (optional)
+   - **Custom endpoint:** `CUSTOM_BASE_URL`, `CUSTOM_API_KEY`, `CUSTOM_MODEL` (optional)
 
 2. Build the application:
    ```bash
@@ -180,5 +222,5 @@ For issues, questions, or suggestions:
 
 ## Acknowledgements
 
-- Thanks to [OpenRouter](https://openrouter.ai/) for providing access to powerful LLMs
+- Thanks to [OpenRouter](https://openrouter.ai/), [NVIDIA NIM](https://build.nvidia.com/), and the broader OpenAI-compatible ecosystem for providing access to powerful LLMs
 - Built with [Next.js](https://nextjs.org/) and [Tailwind CSS](https://tailwindcss.com/)

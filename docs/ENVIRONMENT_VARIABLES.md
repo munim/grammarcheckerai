@@ -2,74 +2,133 @@
 
 This document explains how to configure environment variables for the Grammar Correction Tool project.
 
+## Overview
+
+The application supports **three LLM providers**, selectable at runtime via the `ACTIVE_PROVIDER` env var:
+
+| `ACTIVE_PROVIDER` | Required env vars                                | Notes                                                     |
+|-------------------|--------------------------------------------------|-----------------------------------------------------------|
+| `openrouter` (default) | `OPENROUTER_API_KEY`                          | Backward-compatible default — existing deployments keep working. |
+| `nvidia`          | `NVIDIA_API_KEY`                                 | Uses NVIDIA NIM hosted endpoint (build.nvidia.com).       |
+| `custom`          | `CUSTOM_BASE_URL`, `CUSTOM_API_KEY`               | Any OpenAI Chat Completions-compatible endpoint.          |
+
+You only need to configure credentials for **the one provider you pick**.
+
 ## Environment Files
 
 ### .env.example
-Located in the project root, this file serves as a template for environment variables:
+Located in the project root, this file serves as a template for environment variables and ships commented samples for each provider:
 ```
-# Environment variables for Grammar Correction Tool
+# Pick the active LLM provider
+# ACTIVE_PROVIDER=openrouter   # default if unset
 
-# OpenRouter API Key (required)
+# OpenRouter
 OPENROUTER_API_KEY=your_openrouter_api_key_here
-
-# Application URL
 NEXTJS_URL=http://localhost:3000
-
-# OpenRouter Model (optional)
 OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
+
+# NVIDIA NIM
+# NVIDIA_API_KEY=nvapi-your_key_here
+# NVIDIA_MODEL=meta/llama-3.1-70b-instruct
+# NVIDIA_BASE_URL=https://integrate.api.nvidia.com/v1   # optional override
+
+# Custom OpenAI-compatible endpoint
+# CUSTOM_BASE_URL=https://your-endpoint.example.com/v1
+# CUSTOM_API_KEY=your_key_for_that_endpoint
+# CUSTOM_MODEL=gpt-3.5-turbo
 ```
 
 ### .env
-For local development, copy `.env.example` to `.env` and update with your actual values:
-```
-# Environment variables for Grammar Correction Tool
-# Copy this file to .env and update with your values
+For local development, copy `.env.example` to `.env` and update with your actual values for the provider you intend to use.
 
-# OpenRouter API Key (required)
-OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+## Provider Selection
 
-# Application URL
-NEXTJS_URL=http://localhost:3000
+### ACTIVE_PROVIDER
+- **Purpose**: Selects which LLM provider the server uses for grammar checks.
+- **Required**: No
+- **Default**: `openrouter`
+- **Allowed values**: `openrouter`, `nvidia`, `custom` (case-insensitive)
+- **Behavior**: Read on every request, so edits to the env var take effect without rebuild when paired with hot-reload.
 
-# OpenRouter Model (optional)
-OPENROUTER_MODEL=mistralai/mistral-7b-instruct:free
-```
-
-## Required Environment Variables
+## OpenRouter (when `ACTIVE_PROVIDER=openrouter`)
 
 ### OPENROUTER_API_KEY
-- **Purpose**: Authentication for OpenRouter API
-- **Required**: Yes
-- **How to get**: Sign up at [openrouter.ai](https://openrouter.ai) and generate an API key
-- **Format**: `sk-or-v1-` followed by alphanumeric characters
+- **Required**: Yes (for OpenRouter)
+- **Format**: `sk-or-v1-…`
+- **Get one**: [openrouter.ai](https://openrouter.ai)
 
 ### NEXTJS_URL
-- **Purpose**: Referer header for OpenRouter API requests
-- **Required**: Yes
+- **Purpose**: Sent as the `HTTP-Referer` header that OpenRouter requires for attribution.
+- **Required**: Yes (for OpenRouter)
 - **Default**: `http://localhost:3000`
-- **Production**: Should match your deployed URL
-
-## Optional Environment Variables
 
 ### OPENROUTER_MODEL
-- **Purpose**: Specify which OpenRouter model to use for grammar checking
 - **Required**: No
 - **Default**: `mistralai/mistral-7b-instruct:free`
-- **Options**: Any model supported by OpenRouter
+- **Any OpenRouter model id works.**
+
+## NVIDIA NIM (when `ACTIVE_PROVIDER=nvidia`)
+
+### NVIDIA_API_KEY
+- **Required**: Yes (for NVIDIA)
+- **Get one**: [build.nvidia.com](https://build.nvidia.com) → "Get API Key"
+
+### NVIDIA_MODEL
+- **Required**: No
+- **Default**: `meta/llama-3.1-70b-instruct`
+- Common alternatives: `meta/llama-3.1-8b-instruct`, `mistralai/mistral-large`, `google/gemma-2-9b-it`.
+
+### NVIDIA_BASE_URL
+- **Required**: No
+- **Default**: `https://integrate.api.nvidia.com/v1`
+- Override only when using a self-hosted NIM or a private endpoint.
+
+## Custom OpenAI-compatible Endpoint (when `ACTIVE_PROVIDER=custom`)
+
+### CUSTOM_BASE_URL
+- **Purpose**: Chat-completions base URL of the endpoint (e.g. `http://localhost:11434/v1` for Ollama's OpenAI listener).
+- **Required**: Yes (for custom)
+- Trailing slashes are stripped automatically.
+
+### CUSTOM_API_KEY
+- **Required**: Yes (for custom)
+- Sent as `Authorization: Bearer <CUSTOM_API_KEY>`.
+
+### CUSTOM_MODEL
+- **Required**: No
+- **Default**: `gpt-3.5-turbo`
+- **Override**: Set `CUSTOM_MODEL` (or pass `model` at runtime in the future) when targeting a non-OpenAI model name.
+
+## Other Variables
+
+### TURNSTILE_SECRET_KEY
+- **Required**: Yes (for production, when Turnstile is enabled)
+- **Default**: none
+
+### NEXT_PUBLIC_TURNSTILE_SITE_KEY
+- **Required**: Required for frontend widget when Turnstile is enabled.
+
+### NEXT_PUBLIC_TURNSTILE_ENABLED
+- **Required**: No
+- **Default**: `true`
+- Set to `false` to disable Turnstile verification entirely.
 
 ## Configuration Methods
 
 ### Development (Local)
 1. Copy `.env.example` to `.env`
-2. Update values in `.env` with your actual credentials
+2. Update values in `.env` with the credentials for **the provider you selected via `ACTIVE_PROVIDER`**
 3. The application will automatically load these values
 
 ### Docker
-Environment variables can be passed to Docker in several ways:
 
 1. **Using -e flag**:
    ```bash
-   docker run -p 3000:3000 -e OPENROUTER_API_KEY=your_key_here grammar-check
+   docker run -p 3000:3000 \
+     -e ACTIVE_PROVIDER=nvidia \
+     -e NVIDIA_API_KEY=nvapi-… \
+     -e NVIDIA_MODEL=meta/llama-3.1-70b-instruct \
+     grammar-check
    ```
 
 2. **Using env_file**:
@@ -80,85 +139,71 @@ Environment variables can be passed to Docker in several ways:
 3. **Using Docker Compose** (recommended):
    ```bash
    cp .env.example .env
-   # Edit .env with your values
+   # Edit .env with your provider's credentials
    docker-compose up
    ```
 
 ### Production Deployment
-Set environment variables according to your deployment platform:
 
 #### Vercel
-- Go to your project settings
-- Navigate to Environment Variables
-- Add each variable with its value
+- Add each env var under Project Settings → Environment Variables.
 
 #### Heroku
-- Use the Heroku CLI:
   ```bash
-  heroku config:set OPENROUTER_API_KEY=your_key_here
-  heroku config:set NEXTJS_URL=https://your-app.herokuapp.com
+  heroku config:set ACTIVE_PROVIDER=nvidia NVIDIA_API_KEY=…
   ```
 
-#### AWS Elastic Beanstalk
-- Create a `.env` file in your application bundle
-- Or set variables in the EB console under Configuration > Software
-
 #### Google Cloud Run
-- Use the gcloud CLI:
   ```bash
-  gcloud run deploy --set-env-vars OPENROUTER_API_KEY=your_key_here,NEXTJS_URL=https://your-service.run.app
+  gcloud run deploy --set-env-vars ACTIVE_PROVIDER=nvidia,NVIDIA_API_KEY=…
   ```
 
 ## Security Best Practices
 
-1. **Never commit .env files** - Add `.env` to `.gitignore`
-2. **Use strong API keys** - Rotate keys regularly
-3. **Limit API key scopes** - Use keys with minimal required permissions
-4. **Environment-specific keys** - Use different keys for development, staging, and production
-5. **Secret management** - For production, consider using a secret management service
-
-## Docker Configuration
-
-### docker-compose.yml
-The Docker Compose file is configured to:
-1. Load environment variables from the `.env` file
-2. Set default values for optional variables
-3. Pass environment variables to the container
-
-### Dockerfile
-The Dockerfile:
-1. Installs dependencies with `--legacy-peer-deps` to avoid React version conflicts
-2. Builds the Next.js application
-3. Exposes port 3000
+1. **Never commit .env files** — already on `.gitignore`.
+2. **Use strong API keys** — rotate regularly.
+3. **Limit API key scopes** — use the narrowest scopes available.
+4. **Environment-specific keys** — different keys per environment.
+5. **Secret management** — use a secret manager in production.
 
 ## Troubleshooting
 
-### Missing API Key
-**Error**: "OpenRouter API key is not configured"
-**Solution**: Ensure `OPENROUTER_API_KEY` is set in your environment
+### "LLM provider is not configured" (HTTP 500)
+**Cause**: `ACTIVE_PROVIDER` is set but the corresponding provider's API key (or `CUSTOM_BASE_URL`) is missing.
+**Solution**: Check the response body's `details` field. It will say exactly which env var is missing for the active provider, e.g.:
+```
+{
+  "error": "LLM provider is not configured",
+  "details": "NVIDIA NIM is selected (ACTIVE_PROVIDER='nvidia') but NVIDIA_API_KEY is not set.",
+  "provider": "nvidia"
+}
+```
 
-### Incorrect API Key
-**Error**: "401 Unauthorized" from OpenRouter API
-**Solution**: Verify your API key is correct and active
+### "Unknown ACTIVE_PROVIDER"
+**Solution**: Choose one of `openrouter`, `nvidia`, or `custom` (case-insensitive). The factory throws a list of supported values.
 
-### Model Not Found
-**Error**: "Model not found" from OpenRouter API
-**Solution**: Check that the model name in `OPENROUTER_MODEL` is supported by OpenRouter
+### Provider-specific auth errors
+- **OpenRouter**: HTTP `401 Unauthorized` → API key invalid or expired.
+- **NVIDIA NIM**: HTTP `403 Forbidden` → regenerate API key, or check the model id is available in your NIM account.
+- **Custom**: HTTP `401` / `403` → check `CUSTOM_BASE_URL` and bearer token match the endpoint.
+
+### Model not found
+**Solution**: Verify the model id in the corresponding `*_MODEL` env var is supported by the active provider.
 
 ### Environment Variables Not Loaded
-**Issue**: Variables not being read by the application
-**Solution**: 
-1. Verify the `.env` file is in the correct location (project root)
-2. Check that variable names match exactly (case-sensitive)
-3. Restart the application after updating variables
+1. Verify `.env` is in the project root.
+2. Variable names are case-sensitive.
+3. Restart after edits (especially when not using hot-reload).
 
 ## Default Values
 
-If environment variables are not set, the application will use these defaults:
+| Variable        | Default                                  |
+|-----------------|------------------------------------------|
+| `ACTIVE_PROVIDER` | `openrouter`                           |
+| `NEXTJS_URL`    | `http://localhost:3000`                  |
+| `OPENROUTER_MODEL` | `mistralai/mistral-7b-instruct:free`  |
+| `NVIDIA_MODEL`  | `meta/llama-3.1-70b-instruct`            |
+| `NVIDIA_BASE_URL` | `https://integrate.api.nvidia.com/v1` |
+| `CUSTOM_MODEL`  | `gpt-3.5-turbo`                          |
 
-| Variable | Default Value |
-|----------|---------------|
-| NEXTJS_URL | http://localhost:3000 |
-| OPENROUTER_MODEL | mistralai/mistral-7b-instruct:free |
-
-Note: `OPENROUTER_API_KEY` has no default and must be provided.
+Each provider's API key (and `CUSTOM_BASE_URL`) has no default and must be set for the corresponding provider if you select it.

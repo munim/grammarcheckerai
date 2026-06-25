@@ -22,14 +22,14 @@ export default function Footer() {
                 href="/about" 
                 className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
               >
-                About OpenRouter & LLM
+                About LLM Providers
               </Link>
             </div>
           </div>
         </div>
         <div className="mt-4 text-center md:text-right">
           <p className="text-xs text-gray-400 dark:text-gray-500">
-            This tool uses OpenRouter API and Large Language Models for grammar correction.
+            This tool uses configurable Large Language Model providers (OpenRouter, NVIDIA NIM, or any OpenAI-compatible endpoint) for grammar correction.
           </p>
         </div>
       </div>

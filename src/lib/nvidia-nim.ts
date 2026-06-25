@@ -2,21 +2,27 @@ import { createGrammarPrompt } from './grammar-prompt';
 import { LLMClient } from './llm-client';
 
 /**
- * OpenRouter chat-completions client.
+ * NVIDIA NIM chat-completions client.
  *
- * Reads the model from OPENROUTER_MODEL (default mistralai/mistral-7b-instruct:free)
- * and emits the standard HTTP-Referer header that OpenRouter requires for
- * attribution.
+ * Uses NVIDIA's hosted NIM endpoint at https://integrate.api.nvidia.com/v1.
+ * Model defaults to meta/llama-3.1-70b-instruct but can be overridden with
+ * the NVIDIA_MODEL env var (e.g. meta/llama-3.1-8b-instruct,
+ * mistralai/mistral-large, etc.).
+ *
+ * NIM accepts the standard OpenAI-compatible schema, so we use the same
+ * (messages, temperature) body. response_format is omitted because NIM models
+ * are not guaranteed to support json_object — safeJsonParse handles raw JSON
+ * fallback regardless.
  */
-export class OpenRouterClient implements LLMClient {
+export class NvidiaNimClient implements LLMClient {
   private apiKey: string;
   private baseUrl: string;
   private model: string;
 
   constructor(apiKey: string) {
     this.apiKey = apiKey;
-    this.baseUrl = 'https://openrouter.ai/api/v1';
-    this.model = process.env.OPENROUTER_MODEL || 'mistralai/mistral-7b-instruct:free';
+    this.baseUrl = process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1';
+    this.model = process.env.NVIDIA_MODEL || 'meta/llama-3.1-70b-instruct';
   }
 
   async checkGrammar(
@@ -32,7 +38,7 @@ export class OpenRouterClient implements LLMClient {
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': process.env.NEXTJS_URL || 'http://localhost:3000',
+        'Accept': 'application/json',
       },
       body: JSON.stringify({
         model: this.model,
@@ -43,19 +49,18 @@ export class OpenRouterClient implements LLMClient {
           },
         ],
         temperature: 0.7,
-        response_format: { type: 'json_object' },
       }),
     });
 
     if (!response.ok) {
-      throw new Error(`OpenRouter API error: ${response.status} ${response.statusText}`);
+      throw new Error(`NVIDIA NIM API error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
-    console.log('OpenRouter API response:', JSON.stringify(data, null, 2));
+    console.log('NVIDIA NIM API response:', JSON.stringify(data, null, 2));
 
     if (!data.choices || !Array.isArray(data.choices) || data.choices.length === 0) {
-      throw new Error('Invalid response structure from OpenRouter API');
+      throw new Error('Invalid response structure from NVIDIA NIM API');
     }
 
     return data;
